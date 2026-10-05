@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weekly Test - 50 MCQs (Math, English & Science)</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: #eef2f7;
+    color: #1a1a2e;
+    line-height: 1.6;
+    padding: 20px;
+  }
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    overflow: hidden;
+  }
+  header {
+    background: linear-gradient(135deg, #0f4c81, #1a6fb5);
+    color: #fff;
+    padding: 28px 24px;
+    text-align: center;
+  }
+  header h1 { font-size: 1.6rem; margin-bottom: 6px; }
+  header p { font-size: 0.95rem; opacity: 0.9; }
+  .info-bar {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    background: #f7f9fc;
+    padding: 14px;
+    border-bottom: 1px solid #e2e8f0;
+    flex-wrap: wrap;
+    font-size: 0.9rem;
+  }
+  .info-bar span { font-weight: 600; color: #0f4c81; }
+  .timer {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: #0f4c81;
+    color: #fff;
+    text-align: center;
+    padding: 12px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .timer.warning { background: #c0392b; animation: pulse 1s infinite; }
+  @keyframes pulse { 50% { opacity: 0.7; } }
+  .student-info {
+    padding: 20px 24px;
+    background: #f7f9fc;
+    border-bottom: 1px solid #e2e8f0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .student-info label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 4px; color: #333; }
+  .student-info input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #cbd5e0;
+    border-radius: 6px;
+    font-size: 0.95rem;
+  }
+  .student-info input:focus { outline: 2px solid #1a6fb5; border-color: transparent; }
+  .section-title {
+    background: #e8f0fe;
+    color: #0f4c81;
+    padding: 14px 24px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    border-top: 2px solid #1a6fb5;
+    border-bottom: 1px solid #d0dff0;
+    margin-top: 10px;
+  }
+  .question {
+    padding: 18px 24px;
+    border-bottom: 1px solid #edf2f7;
+  }
+  .question:hover { background: #fafcff; }
+  .question p.qtext {
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #1a1a2e;
+  }
+  .question label {
+    display: block;
+    padding: 8px 12px;
+    margin: 4px 0;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 0.95rem;
+  }
+  .question label:hover { background: #eef4fb; border-color: #1a6fb5; }
+  .question input[type="radio"] { margin-right: 8px; accent-color: #1a6fb5; }
+  .question input[type="radio"]:checked + span { font-weight: 700; color: #0f4c81; }
+  .submit-area {
+    padding: 24px;
+    text-align: center;
+    background: #f7f9fc;
+    border-top: 2px solid #1a6fb5;
+  }
+  .submit-btn {
+    background: linear-gradient(135deg, #0f4c81, #1a6fb5);
+    color: #fff;
+    border: none;
+    padding: 14px 48px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(15,76,129,0.3); }
+  .submit-btn:disabled { background: #a0aec0; cursor: not-allowed; transform: none; }
+  .progress-bar {
+    position: sticky;
+    top: 48px;
+    z-index: 99;
+    background: #fff;
+    padding: 8px 24px;
+    font-size: 0.85rem;
+    color: #555;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .progress-track {
+    height: 6px;
+    background: #e2e8f0;
+    border-radius: 3px;
+    margin-top: 6px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #1a6fb5, #27ae60);
+    width: 0%;
+    transition: width 0.3s;
+  }
+  .result-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 999;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .result-modal.show { display: flex; }
+  .result-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 32px;
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  }
+  .result-card h2 { color: #0f4c81; margin-bottom: 12px; }
+  .result-card .score-big { font-size: 3rem; font-weight: 800; color: #27ae60; margin: 12px 0; }
+  .result-card .pct { font-size: 1.2rem; color: #555; margin-bottom: 16px; }
+  .result-card p { font-size: 0.9rem; color: #666; margin-bottom: 20px; }
+  .result-card button {
+    background: #0f4c81; color: #fff; border: none;
+    padding: 10px 32px; border-radius: 6px; cursor: pointer; font-weight: 600;
+  }
+  @media (max-width: 600px) {
+    .student-info { grid-template-columns: 1fr; }
+    header h1 { font-size: 1.25rem; }
+    .question { padding: 14px 16px; }
+    .submit-btn { width: 100%; padding: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>Weekly Test — 50 MCQs</h1>
+    <p>Mathematics, English &amp; Science</p>
+  </header>
+
+  <div class="info-bar">
+    <div>Total Questions: <span>50</span></div>
+    <div>Total Marks: <span>50</span></div>
+    <div>Time Allowed: <span>60 Minutes</span></div>
+  </div>
+
+  <div class="timer" id="timer">⏱ 60:00</div>
+
+  <div class="student-info">
+    <div>
+      <label for="studentName">Student Name</label>
+      <input type="text" id="studentName" placeholder="Enter your full name" required>
+    </div>
+    <div>
+      <label for="rollNo">Roll No.</label>
+      <input type="text" id="rollNo" placeholder="Enter your roll number" required>
+    </div>
+  </div>
+
+  <div class="progress-bar">
+    <span id="progressText">Answered: 0 / 50</span>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <form id="quizForm" onsubmit="return false;">
+
+    <!-- SECTION A -->
+    <div class="section-title">SECTION A: MULTIPLE CHOICE QUESTIONS (Q1–Q25)</div>
+
+    <!-- Q1 -->
+    <div class="question">
+      <p class="qtext">Q1. Finding the smallest number that is a multiple of two given numbers gives us their:</p>
+      <label><input type="radio" name="q1" value="A"><span>A) HCF</span></label>
+      <label><input type="radio" name="q1" value="B"><span>B) LCM</span></label>
+      <label><input type="radio" name="q1" value="C"><span>C) Factor</span></label>
+      <label><input type="radio" name="q1" value="D"><span>D) Multiple</span></label>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question">
+      <p class="qtext">Q2. The greatest number that divides two given numbers exactly is called their:</p>
+      <label><input type="radio" name="q2" value="A"><span>A) LCM</span></label>
+      <label><input type="radio" name="q2" value="B"><span>B) HCF</span></label>
+      <label><input type="radio" name="q2" value="C"><span>C) Multiple</span></label>
+      <label><input type="radio" name="q2" value="D"><span>D) Fraction</span></label>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question">
+      <p class="qtext">Q3. In BODMAS, "O" stands for:</p>
+      <label><input type="radio" name="q3" value="A"><span>A) Operation</span></label>
+      <label><input type="radio" name="q3" value="B"><span>B) Orders</span></label>
+      <label><input type="radio" name="q3" value="C"><span>C) Odd</span></label>
+      <label><input type="radio" name="q3" value="D"><span>D) Output</span></label>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question">
+      <p class="qtext">Q4. A fraction with the same numerator and denominator is always equal to:</p>
+      <label><input type="radio" name="q4" value="A"><span>A) Zero</span></label>
+      <label><input type="radio" name="q4" value="B"><span>B) Two</span></label>
+      <label><input type="radio" name="q4" value="C"><span>C) One</span></label>
+      <label><input type="radio" name="q4" value="D"><span>D) Itself</span></label>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question">
+      <p class="qtext">Q5. 5/10 written in its simplest form is:</p>
+      <label><input type="radio" name="q5" value="A"><span>A) 1/5</span></label>
+      <label><input type="radio" name="q5" value="B"><span>B) 1/2</span></label>
+      <label><input type="radio" name="q5" value="C"><span>C) 2/5</span></label>
+      <label><input type="radio" name="q5" value="D"><span>D) 5/2</span></label>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question">
+      <p class="qtext">Q6. The product of two negative integers is always:</p>
+      <label><input type="radio" name="q6" value="A"><span>A) Negative</span></label>
+      <label><input type="radio" name="q6" value="B"><span>B) Zero</span></label>
+      <label><input type="radio" name="q6" value="C"><span>C) Positive</span></label>
+      <label><input type="radio" name="q6" value="D"><span>D) Undefined</span></label>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question">
+      <p class="qtext">Q7. The first five multiples of 3 are 3, 6, 9, 12 and:</p>
+      <label><input type="radio" name="q7" value="A"><span>A) 14</span></label>
+      <label><input type="radio" name="q7" value="B"><span>B) 15</span></label>
+      <label><input type="radio" name="q7" value="C"><span>C) 16</span></label>
+      <label><input type="radio" name="q7" value="D"><span>D) 18</span></label>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question">
+      <p class="qtext">Q8. The factors of 15 are 1, 3, 5 and:</p>
+      <label><input type="radio" name="q8" value="A"><span>A) 10</span></label>
+      <label><input type="radio" name="q8" value="B"><span>B) 12</span></label>
+      <label><input type="radio" name="q8" value="C"><span>C) 15</span></label>
+      <label><input type="radio" name="q8" value="D"><span>D) 20</span></label>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question">
+      <p class="qtext">Q9. On a number line, integers to the left of zero are called:</p>
+      <label><input type="radio" name="q9" value="A"><span>A) Positive integers</span></label>
+      <label><input type="radio" name="q9" value="B"><span>B) Negative integers</span></label>
+      <label><input type="radio" name="q9" value="C"><span>C) Whole numbers</span></label>
+      <label><input type="radio" name="q9" value="D"><span>D) Natural numbers</span></label>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question">
+      <p class="qtext">Q10. In BODMAS, after Brackets and Orders, we solve ______ and ______ from left to right.</p>
+      <label><input type="radio" name="q10" value="A"><span>A) Addition and Subtraction</span></label>
+      <label><input type="radio" name="q10" value="B"><span>B) Division and Multiplication</span></label>
+      <label><input type="radio" name="q10" value="C"><span>C) Multiplication and Addition</span></label>
+      <label><input type="radio" name="q10" value="D"><span>D) Subtraction and Division</span></label>
+    </div>
+
+    <!-- Q11 -->
+    <div class="question">
+      <p class="qtext">Q11. Naming words such as "dog", "city" and "happiness" are called:</p>
+      <label><input type="radio" name="q11" value="A"><span>A) Verbs</span></label>
+      <label><input type="radio" name="q11" value="B"><span>B) Nouns</span></label>
+      <label><input type="radio" name="q11" value="C"><span>C) Adjectives</span></label>
+      <label><input type="radio" name="q11" value="D"><span>D) Adverbs</span></label>
+    </div>
+
+    <!-- Q12 -->
+    <div class="question">
+      <p class="qtext">Q12. "A" and "an" are called ______ articles.</p>
+      <label><input type="radio" name="q12" value="A"><span>A) Definite</span></label>
+      <label><input type="radio" name="q12" value="B"><span>B) Indefinite</span></label>
+      <label><input type="radio" name="q12" value="C"><span>C) Proper</span></label>
+      <label><input type="radio" name="q12" value="D"><span>D) Common</span></label>
+    </div>
+
+    <!-- Q13 -->
+    <div class="question">
+      <p class="qtext">Q13. We use "a" before words that begin with a ______ sound.</p>
+      <label><input type="radio" name="q13" value="A"><span>A) Vowel</span></label>
+      <label><input type="radio" name="q13" value="B"><span>B) Consonant</span></label>
+      <label><input type="radio" name="q13" value="C"><span>C) Silent</span></label>
+      <label><input type="radio" name="q13" value="D"><span>D) Long</span></label>
+    </div>
+
+    <!-- Q14 -->
+    <div class="question">
+      <p class="qtext">Q14. "Big" and "large" are ______ of each other.</p>
+      <label><input type="radio" name="q14" value="A"><span>A) Antonyms</span></label>
+      <label><input type="radio" name="q14" value="B"><span>B) Synonyms</span></label>
+      <label><input type="radio" name="q14" value="C"><span>C) Homonyms</span></label>
+      <label><input type="radio" name="q14" value="D"><span>D) Acronyms</span></label>
+    </div>
+
+    <!-- Q15 -->
+    <div class="question">
+      <p class="qtext">Q15. "Hot" and "cold" are ______ of each other.</p>
+      <label><input type="radio" name="q15" value="A"><span>A) Synonyms</span></label>
+      <label><input type="radio" name="q15" value="B"><span>B) Antonyms</span></label>
+      <label><input type="radio" name="q15" value="C"><span>C) Homophones</span></label>
+      <label><input type="radio" name="q15" value="D"><span>D) Prefixes</span></label>
+    </div>
+
+    <!-- Q16 -->
+    <div class="question">
+      <p class="qtext">Q16. A word that joins two words or sentences, such as "and" or "but", is called a:</p>
+      <label><input type="radio" name="q16" value="A"><span>A) Preposition</span></label>
+      <label><input type="radio" name="q16" value="B"><span>B) Conjunction</span></label>
+      <label><input type="radio" name="q16" value="C"><span>C) Interjection</span></label>
+      <label><input type="radio" name="q16" value="D"><span>D) Adverb</span></label>
+    </div>
+
+    <!-- Q17 -->
+    <div class="question">
+      <p class="qtext">Q17. There are ______ parts of speech in English.</p>
+      <label><input type="radio" name="q17" value="A"><span>A) Six</span></label>
+      <label><input type="radio" name="q17" value="B"><span>B) Seven</span></label>
+      <label><input type="radio" name="q17" value="C"><span>C) Eight</span></label>
+      <label><input type="radio" name="q17" value="D"><span>D) Nine</span></label>
+    </div>
+
+    <!-- Q18 -->
+    <div class="question">
+      <p class="qtext">Q18. The branch of science that studies rocks and the structure of the Earth is called:</p>
+      <label><input type="radio" name="q18" value="A"><span>A) Biology</span></label>
+      <label><input type="radio" name="q18" value="B"><span>B) Geology</span></label>
+      <label><input type="radio" name="q18" value="C"><span>C) Astronomy</span></label>
+      <label><input type="radio" name="q18" value="D"><span>D) Chemistry</span></label>
+    </div>
+
+    <!-- Q19 -->
+    <div class="question">
+      <p class="qtext">Q19. The study of the universe, stars and planets is called:</p>
+      <label><input type="radio" name="q19" value="A"><span>A) Astrology</span></label>
+      <label><input type="radio" name="q19" value="B"><span>B) Astronomy</span></label>
+      <label><input type="radio" name="q19" value="C"><span>C) Cosmology</span></label>
+      <label><input type="radio" name="q19" value="D"><span>D) Geology</span></label>
+    </div>
+
+    <!-- Q20 -->
+    <div class="question">
+      <p class="qtext">Q20. Our solar system has the sun at its:</p>
+      <label><input type="radio" name="q20" value="A"><span>A) Edge</span></label>
+      <label><input type="radio" name="q20" value="B"><span>B) Centre</span></label>
+      <label><input type="radio" name="q20" value="C"><span>C) Top</span></label>
+      <label><input type="radio" name="q20" value="D"><span>D) Bottom</span></label>
+    </div>
+
+    <!-- Q21 -->
+    <div class="question">
+      <p class="qtext">Q21. The planet known as the "Red Planet" is:</p>
+      <label><input type="radio" name="q21" value="A"><span>A) Venus</span></label>
+      <label><input type="radio" name="q21" value="B"><span>B) Jupiter</span></label>
+      <label><input type="radio" name="q21" value="C"><span>C) Mars</span></label>
+      <label><input type="radio" name="q21" value="D"><span>D) Mercury</span></label>
+    </div>
+
+    <!-- Q22 -->
+    <div class="question">
+      <p class="qtext">Q22. The SI unit of electric current is the:</p>
+      <label><input type="radio" name="q22" value="A"><span>A) Volt</span></label>
+      <label><input type="radio" name="q22" value="B"><span>B) Watt</span></label>
+      <label><input type="radio" name="q22" value="C"><span>C) Ampere</span></label>
+      <label><input type="radio" name="q22" value="D"><span>D) Ohm</span></label>
+    </div>
+
+    <!-- Q23 -->
+    <div class="question">
+      <p class="qtext">Q23. The SI unit of temperature is the:</p>
+      <label><input type="radio" name="q23" value="A"><span>A) Celsius</span></label>
+      <label><input type="radio" name="q23" value="B"><span>B) Fahrenheit</span></label>
+      <label><input type="radio" name="q23" value="C"><span>C) Kelvin</span></label>
+      <label><input type="radio" name="q23" value="D"><span>D) Degree</span></label>
+    </div>
+
+    <!-- Q24 -->
+    <div class="question">
+      <p class="qtext">Q24. Living things that make their own food are called:</p>
+      <label><input type="radio" name="q24" value="A"><span>A) Consumers</span></label>
+      <label><input type="radio" name="q24" value="B"><span>B) Producers</span></label>
+      <label><input type="radio" name="q24" value="C"><span>C) Decomposers</span></label>
+      <label><input type="radio" name="q24" value="D"><span>D) Predators</span></label>
+    </div>
+
+    <!-- Q25 -->
+    <div class="question">
+      <p class="qtext">Q25. A ______ is a living thing that eats other living things for food.</p>
+      <label><input type="radio" name="q25" value="A"><span>A) Producer</span></label>
+      <label><input type="radio" name="q25" value="B"><span>B) Consumer</span></label>
+      <label><input type="radio" name="q25" value="C"><span>C) Decomposer</span></label>
+      <label><input type="radio" name="q25" value="D"><span>D) Herbivore</span></label>
+    </div>
+
+    <!-- SECTION B -->
+    <div class="section-title">SECTION B: MULTIPLE CHOICE QUESTIONS (Q26–Q50)</div>
+
+    <!-- Q26 -->
+    <div class="question">
+      <p class="qtext">Q26. What is the LCM of 3 and 5?</p>
+      <label><input type="radio" name="q26" value="A"><span>A) 8</span></label>
+      <label><input type="radio" name="q26" value="B"><span>B) 10</span></label>
+      <label><input type="radio" name="q26" value="C"><span>C) 15</span></label>
+      <label><input type="radio" name="q26" value="D"><span>D) 30</span></label>
+    </div>
+
+    <!-- Q27 -->
+    <div class="question">
+      <p class="qtext">Q27. What is the HCF of 10 and 15?</p>
+      <label><input type="radio" name="q27" value="A"><span>A) 1</span></label>
+      <label><input type="radio" name="q27" value="B"><span>B) 5</span></label>
+      <label><input type="radio" name="q27" value="C"><span>C) 10</span></label>
+      <label><input type="radio" name="q27" value="D"><span>D) 15</span></label>
+    </div>
+
+    <!-- Q28 -->
+    <div class="question">
+      <p class="qtext">Q28. Solve using BODMAS: 20 − 4 × 2</p>
+      <label><input type="radio" name="q28" value="A"><span>A) 32</span></label>
+      <label><input type="radio" name="q28" value="B"><span>B) 12</span></label>
+      <label><input type="radio" name="q28" value="C"><span>C) 8</span></label>
+      <label><input type="radio" name="q28" value="D"><span>D) 40</span></label>
+    </div>
+
+    <!-- Q29 -->
+    <div class="question">
+      <p class="qtext">Q29. Convert 3/6 into its simplest form.</p>
+      <label><input type="radio" name="q29" value="A"><span>A) 1/3</span></label>
+      <label><input type="radio" name="q29" value="B"><span>B) 1/2</span></label>
+      <label><input type="radio" name="q29" value="C"><span>C) 2/3</span></label>
+      <label><input type="radio" name="q29" value="D"><span>D) 3/2</span></label>
+    </div>
+
+    <!-- Q30 -->
+    <div class="question">
+      <p class="qtext">Q30. What is the product of −4 and −2?</p>
+      <label><input type="radio" name="q30" value="A"><span>A) −8</span></label>
+      <label><input type="radio" name="q30" value="B"><span>B) 8</span></label>
+      <label><input type="radio" name="q30" value="C"><span>C) −6</span></label>
+      <label><input type="radio" name="q30" value="D"><span>D) 6</span></label>
+    </div>
+
+    <!-- Q31 -->
+    <div class="question">
+      <p class="qtext">Q31. Write any three factors of 18.</p>
+      <label><input type="radio" name="q31" value="A"><span>A) 1, 2, 3</span></label>
+      <label><input type="radio" name="q31" value="B"><span>B) 1, 2, 9</span></label>
+      <label><input type="radio" name="q31" value="C"><span>C) 2, 3, 6</span></label>
+      <label><input type="radio" name="q31" value="D"><span>D) All of these</span></label>
+    </div>
+
+    <!-- Q32 -->
+    <div class="question">
+      <p class="qtext">Q32. Write the first three multiples of 7.</p>
+      <label><input type="radio" name="q32" value="A"><span>A) 7, 14, 21</span></label>
+      <label><input type="radio" name="q32" value="B"><span>B) 7, 17, 27</span></label>
+      <label><input type="radio" name="q32" value="C"><span>C) 7, 21, 35</span></label>
+      <label><input type="radio" name="q32" value="D"><span>D) 14, 21, 28</span></label>
+    </div>
+
+    <!-- Q33 -->
+    <div class="question">
+      <p class="qtext">Q33. What does "B" stand for in BODMAS?</p>
+      <label><input type="radio" name="q33" value="A"><span>A) Bracket</span></label>
+      <label><input type="radio" name="q33" value="B"><span>B) Base</span></label>
+      <label><input type="radio" name="q33" value="C"><span>C) Binary</span></label>
+      <label><input type="radio" name="q33" value="D"><span>D) Both</span></label>
+    </div>
+
+    <!-- Q34 -->
+    <div class="question">
+      <p class="qtext">Q34. What is an adjective? Give one example.</p>
+      <label><input type="radio" name="q34" value="A"><span>A) A naming word; book</span></label>
+      <label><input type="radio" name="q34" value="B"><span>B) A word that describes a noun; beautiful</span></label>
+      <label><input type="radio" name="q34" value="C"><span>C) An action word; run</span></label>
+      <label><input type="radio" name="q34" value="D"><span>D) A joining word; and</span></label>
+    </div>
+
+    <!-- Q35 -->
+    <div class="question">
+      <p class="qtext">Q35. What is a verb? Give one example.</p>
+      <label><input type="radio" name="q35" value="A"><span>A) A naming word; table</span></label>
+      <label><input type="radio" name="q35" value="B"><span>B) A describing word; tall</span></label>
+      <label><input type="radio" name="q35" value="C"><span>C) A doing/action word; run</span></label>
+      <label><input type="radio" name="q35" value="D"><span>D) A joining word; but</span></label>
+    </div>
+
+    <!-- Q36 -->
+    <div class="question">
+      <p class="qtext">Q36. Give one synonym of the word "fast".</p>
+      <label><input type="radio" name="q36" value="A"><span>A) Slow</span></label>
+      <label><input type="radio" name="q36" value="B"><span>B) Quick</span></label>
+      <label><input type="radio" name="q36" value="C"><span>C) Late</span></label>
+      <label><input type="radio" name="q36" value="D"><span>D) Stop</span></label>
+    </div>
+
+    <!-- Q37 -->
+    <div class="question">
+      <p class="qtext">Q37. Give one antonym of the word "difficult".</p>
+      <label><input type="radio" name="q37" value="A"><span>A) Hard</span></label>
+      <label><input type="radio" name="q37" value="B"><span>B) Tough</span></label>
+      <label><input type="radio" name="q37" value="C"><span>C) Easy</span></label>
+      <label><input type="radio" name="q37" value="D"><span>D) Complex</span></label>
+    </div>
+
+    <!-- Q38 -->
+    <div class="question">
+      <p class="qtext">Q38. Name the two types of articles.</p>
+      <label><input type="radio" name="q38" value="A"><span>A) Proper and Common</span></label>
+      <label><input type="radio" name="q38" value="B"><span>B) Definite and Indefinite</span></label>
+      <label><input type="radio" name="q38" value="C"><span>C) Singular and Plural</span></label>
+      <label><input type="radio" name="q38" value="D"><span>D) Countable and Uncountable</span></label>
+    </div>
+
+    <!-- Q39 -->
+    <div class="question">
+      <p class="qtext">Q39. Is "an" used before a vowel sound or a consonant sound?</p>
+      <label><input type="radio" name="q39" value="A"><span>A) Consonant sound</span></label>
+      <label><input type="radio" name="q39" value="B"><span>B) Vowel sound</span></label>
+      <label><input type="radio" name="q39" value="C"><span>C) Silent sound</span></label>
+      <label><input type="radio" name="q39" value="D"><span>D) Hard sound</span></label>
+    </div>
+
+    <!-- Q40 -->
+    <div class="question">
+      <p class="qtext">Q40. Name the branch of science that studies chemicals and their reactions.</p>
+      <label><input type="radio" name="q40" value="A"><span>A) Physics</span></label>
+      <label><input type="radio" name="q40" value="B"><span>B) Biology</span></label>
+      <label><input type="radio" name="q40" value="C"><span>C) Chemistry</span></label>
+      <label><input type="radio" name="q40" value="D"><span>D) Geology</span></label>
+    </div>
+
+    <!-- Q41 -->
+    <div class="question">
+      <p class="qtext">Q41. Name the branch of science that studies force, energy and motion.</p>
+      <label><input type="radio" name="q41" value="A"><span>A) Biology</span></label>
+      <label><input type="radio" name="q41" value="B"><span>B) Physics</span></label>
+      <label><input type="radio" name="q41" value="C"><span>C) Chemistry</span></label>
+      <label><input type="radio" name="q41" value="D"><span>D) Astronomy</span></label>
+    </div>
+
+    <!-- Q42 -->
+    <div class="question">
+      <p class="qtext">Q42. Which planet is known as the "Red Planet"?</p>
+      <label><input type="radio" name="q42" value="A"><span>A) Venus</span></label>
+      <label><input type="radio" name="q42" value="B"><span>B) Jupiter</span></label>
+      <label><input type="radio" name="q42" value="C"><span>C) Mars</span></label>
+      <label><input type="radio" name="q42" value="D"><span>D) Mercury</span></label>
+    </div>
+
+    <!-- Q43 -->
+    <div class="question">
+      <p class="qtext">Q43. Which planet is closest to the Earth?</p>
+      <label><input type="radio" name="q43" value="A"><span>A) Mars</span></label>
+      <label><input type="radio" name="q43" value="B"><span>B) Venus</span></label>
+      <label><input type="radio" name="q43" value="C"><span>C) Mercury</span></label>
+      <label><input type="radio" name="q43" value="D"><span>D) Jupiter</span></label>
+    </div>
+
+    <!-- Q44 -->
+    <div class="question">
+      <p class="qtext">Q44. What is the SI unit of electric current?</p>
+      <label><input type="radio" name="q44" value="A"><span>A) Volt</span></label>
+      <label><input type="radio" name="q44" value="B"><span>B) Watt</span></label>
+      <label><input type="radio" name="q44" value="C"><span>C) Ampere</span></label>
+      <label><input type="radio" name="q44" value="D"><span>D) Ohm</span></label>
+    </div>
+
+    <!-- Q45 -->
+    <div class="question">
+      <p class="qtext">Q45. What is the SI unit of length?</p>
+      <label><input type="radio" name="q45" value="A"><span>A) Kilogram</span></label>
+      <label><input type="radio" name="q45" value="B"><span>B) Metre</span></label>
+      <label><input type="radio" name="q45" value="C"><span>C) Second</span></label>
+      <label><input type="radio" name="q45" value="D"><span>D) Kelvin</span></label>
+    </div>
+
+    <!-- Q46 -->
+    <div class="question">
+      <p class="qtext">Q46. Give two examples of living things.</p>
+      <label><input type="radio" name="q46" value="A"><span>A) Stone, chair</span></label>
+      <label><input type="radio" name="q46" value="B"><span>B) Dog, tree</span></label>
+      <label><input type="radio" name="q46" value="C"><span>C) Book, pen</span></label>
+      <label><input type="radio" name="q46" value="D"><span>D) Car, house</span></label>
+    </div>
+
+    <!-- Q47 -->
+    <div class="question">
+      <p class="qtext">Q47. Give two examples of non-living things.</p>
+      <label><input type="radio" name="q47" value="A"><span>A) Dog, tree</span></label>
+      <label><input type="radio" name="q47" value="B"><span>B) Human, bird</span></label>
+      <label><input type="radio" name="q47" value="C"><span>C) Stone, chair</span></label>
+      <label><input type="radio" name="q47" value="D"><span>D) Plant, animal</span></label>
+    </div>
+
+    <!-- Q48 -->
+    <div class="question">
+      <p class="qtext">Q48. What is meant by a "producer" in a food chain?</p>
+      <label><input type="radio" name="q48" value="A"><span>A) A living thing that eats other organisms</span></label>
+      <label><input type="radio" name="q48" value="B"><span>B) A living thing that makes its own food</span></label>
+      <label><input type="radio" name="q48" value="C"><span>C) A living thing that decomposes waste</span></label>
+      <label><input type="radio" name="q48" value="D"><span>D) A living thing that hunts others</span></label>
+    </div>
+
+    <!-- Q49 -->
+    <div class="question">
+      <p class="qtext">Q49. What is meant by a "consumer" in a food chain?</p>
+      <label><input type="radio" name="q49" value="A"><span>A) A living thing that makes its own food</span></label>
+      <label><input type="radio" name="q49" value="B"><span>B) A living thing that eats other organisms for food</span></label>
+      <label><input type="radio" name="q49" value="C"><span>C) A living thing that decomposes waste</span></label>
+      <label><input type="radio" name="q49" value="D"><span>D) A living thing that produces oxygen</span></label>
+    </div>
+
+    <!-- Q50 -->
+    <div class="question">
+      <p class="qtext">Q50. Name any two basic needs of living things.</p>
+      <label><input type="radio" name="q50" value="A"><span>A) Food and Water</span></label>
+      <label><input type="radio" name="q50" value="B"><span>B) Television and Mobile</span></label>
+      <label><input type="radio" name="q50" value="C"><span>C) Books and Pens</span></label>
+      <label><input type="radio" name="q50" value="D"><span>D) Cars and Bicycles</span></label>
+    </div>
+
+  </form>
+
+  <div class="submit-area">
+    <button class="submit-btn" id="submitBtn" onclick="submitTest()">Submit Test</button>
+  </div>
+</div>
+
+<!-- Result Modal -->
+<div class="result-modal" id="resultModal">
+  <div class="result-card">
+    <h2>✅ Test Submitted</h2>
+    <div class="score-big" id="resultScore">0/50</div>
+    <div class="pct" id="resultPct">0%</div>
+    <p id="resultMsg">Your result has been sent to the teacher.</p>
+    <button onclick="closeModal()">Close</button>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL BELOW
+   Format: https://script.google.com/macros/s/XXXXXXXXXXXX/exec
+   ============================================================ */
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxKfXYhRsRrbh6XesALzgjmqPQQPQazjYnJYRdVPn5sMJAiF_oCNVa5yxLN03AZvGqi/exec";
+
+/* ---------- ANSWER KEY ---------- */
+const answerKey = {
+  q1:"B", q2:"B", q3:"B", q4:"C", q5:"B",
+  q6:"C", q7:"B", q8:"C", q9:"B", q10:"B",
+  q11:"B", q12:"B", q13:"B", q14:"B", q15:"B",
+  q16:"B", q17:"C", q18:"B", q19:"B", q20:"B",
+  q21:"C", q22:"C", q23:"C", q24:"B", q25:"B",
+  q26:"C", q27:"B", q28:"B", q29:"B", q30:"B",
+  q31:"D", q32:"A", q33:"A", q34:"B", q35:"C",
+  q36:"B", q37:"C", q38:"B", q39:"B", q40:"C",
+  q41:"B", q42:"C", q43:"B", q44:"C", q45:"B",
+  q46:"B", q47:"C", q48:"B", q49:"B", q50:"A"
+};
+
+/* ---------- TAB SWITCH DETECTION ---------- */
+let tabSwitchCount = 0;
+document.addEventListener("visibilitychange", function () {
+  if (document.hidden) {
+    tabSwitchCount++;
+  }
+});
+
+/* ---------- 60-MINUTE TIMER ---------- */
+let timeLeft = 60 * 60; // seconds
+const timerEl = document.getElementById("timer");
+const submitBtn = document.getElementById("submitBtn");
+
+function updateTimer() {
+  const m = Math.floor(timeLeft / 60);
+  const s = timeLeft % 60;
+  timerEl.textContent = "⏱ " + String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
+  if (timeLeft <= 300) {
+    timerEl.classList.add("warning");
+  }
+  if (timeLeft <= 0) {
+    clearInterval(timerInterval);
+    alert("⏰ Time is up! Your test will be submitted automatically.");
+    submitTest(true);
+  }
+  timeLeft--;
+}
+const timerInterval = setInterval(updateTimer, 1000);
+updateTimer();
+
+/* ---------- PROGRESS TRACKER ---------- */
+const totalQuestions = 50;
+document.getElementById("quizForm").addEventListener("change", updateProgress);
+
+function updateProgress() {
+  let answered = 0;
+  for (let i = 1; i <= totalQuestions; i++) {
+    if (document.querySelector(`input[name="q${i}"]:checked`)) answered++;
+  }
+  document.getElementById("progressText").textContent = `Answered: ${answered} / ${totalQuestions}`;
+  document.getElementById("progressFill").style.width = (answered / totalQuestions * 100) + "%";
+}
+
+/* ---------- AUTO-SUBMIT ON TAB SWITCH (3 strikes) ---------- */
+document.addEventListener("visibilitychange", function () {
+  if (document.hidden && tabSwitchCount >= 3) {
+    alert("⚠️ You switched tabs 3 times. Your test is being submitted automatically.");
+    submitTest(true, "Tab Switch Limit Exceeded");
+  }
+});
+
+/* ---------- SUBMIT TEST ---------- */
+let hasSubmitted = false;
+
+function submitTest(auto = false, reason = "Manual Submit") {
+  if (hasSubmitted) return;
+
+  const name = document.getElementById("studentName").value.trim();
+  const roll = document.getElementById("rollNo").value.trim();
+
+  if (!auto) {
+    if (!name || !roll) {
+      alert("⚠️ Please enter your Name and Roll No. before submitting.");
+      return;
+    }
+    const confirmSubmit = confirm("Are you sure you want to submit your test?");
+    if (!confirmSubmit) return;
+  }
+
+  hasSubmitted = true;
+  clearInterval(timerInterval);
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Submitting...";
+
+  let score = 0;
+  for (let i = 1; i <= totalQuestions; i++) {
+    const selected = document.querySelector(`input[name="q${i}"]:checked`);
+    if (selected && selected.value === answerKey[`q${i}`]) {
+      score++;
+    }
+  }
+
+  const percentage = (score / totalQuestions * 100).toFixed(2);
+
+  const data = {
+    name: name || "Unknown",
+    roll: roll || "Unknown",
+    score: score,
+    percentage: percentage + "%",
+    tabSwitches: tabSwitchCount,
+    reason: reason,
+    testName: "Weekly Test - 50 MCQs"
+  };
+
+  // Send to Google Sheets
+  if (GOOGLE_SCRIPT_URL && !GOOGLE_SCRIPT_URL.includes("PASTE_YOUR")) {
+    fetch(GOOGLE_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    }).catch(err => console.error("Submission error:", err));
+  } else {
+    console.warn("⚠️ GOOGLE_SCRIPT_URL not set. Result not sent to Google Sheets.");
+  }
+
+  // Show result modal
+  document.getElementById("resultScore").textContent = score + "/" + totalQuestions;
+  document.getElementById("resultPct").textContent = percentage + "%";
+  document.getElementById("resultMsg").textContent =
+    (GOOGLE_SCRIPT_URL.includes("PASTE_YOUR")
+      ? "⚠️ Demo mode: URL not configured. Result not saved."
+      : "✅ Your result has been sent to the teacher.");
+  document.getElementById("resultModal").classList.add("show");
+}
+
+function closeModal() {
+  document.getElementById("resultModal").classList.remove("show");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+</script>
+</body>
+</html>
